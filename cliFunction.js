@@ -7,7 +7,26 @@ function createDirectoryStructure() {
 
 // Function to create config file
 function createConfigFile() {
-  // Enter code here...
+  const templateFilePath = "/path/to/original/config.json";
+  const configFilePath = __dirname + "/js/config.js";
+
+  fs.readFile(templateFilePath, "utf8", (err, templateData) => {
+    if (err) throw err;
+
+    // Modify the template data as needed
+    const defaultConfig = JSON.parse(templateData);
+
+    // Write the modified template data to the config file
+    fs.writeFile(
+      configFilePath,
+      JSON.stringify(defaultConfig, null, 2),
+      (err) => {
+        if (err) throw err;
+        console.log("Created a new configuration file.");
+        resetConfig(); // Call resetConfig() again to write the contents to config.js
+      }
+    );
+  });
 }
 
 // Function to create help filesc
@@ -21,8 +40,37 @@ function viewConfigSettings() {
 }
 
 // Function to reset config file to default settings
-function resetConfigFile() {
-  // Enter code here...
+function resetConfig() {
+  const originalFilePath = "/path/to/original/config.json";
+  const configFilePath = __dirname + "/js/config.js";
+
+  // Check if the original configuration file exists
+  fs.access(originalFilePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.log("Original configuration file does not exist.");
+      createConfigFile();
+      return;
+    }
+
+    // Read the original configuration file
+    fs.readFile(originalFilePath, "utf8", (err, data) => {
+      if (err) throw err;
+
+      // Write the contents of the original configuration to the config file
+      fs.writeFile(configFilePath, data, (err) => {
+        if (err) throw err;
+        console.log(
+          "The configuration file has been reset to its original state!"
+        );
+        myEmitter.emit(
+          "log",
+          "resetConfig()",
+          "INFO",
+          "config.js reset to original state."
+        );
+      });
+    });
+  });
 }
 
 // Function to update specific config setting
