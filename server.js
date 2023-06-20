@@ -1,35 +1,34 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const crypto = require('crypto');
-const crc32 = require('crc-32');
+const express = require("express");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const crypto = require("crypto");
+const crc32 = require("crc-32");
 
 const app = express();
 const port = 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Routes
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
-app.get('/signup', (req, res) => {
-  res.sendFile(__dirname + '/signup.html');
+app.get("/signup", (req, res) => {
+  res.sendFile(__dirname + "/pages/signup.html");
 });
 
-app.post('/signup', (req, res) => {
+app.post("/signup", (req, res) => {
   const { username, password, cell, email } = req.body;
 
-
   // Convert input data to a Buffer object
-  const inputData = Buffer.from(username + password + cell + email, 'utf8');
+  const inputData = Buffer.from(username + password + cell + email, "utf8");
 
   // Generate unique token using CRC32
   const token = crc32.buf(inputData).toString(16);
@@ -40,11 +39,11 @@ app.post('/signup', (req, res) => {
     password,
     email,
     cell,
-    token
+    token,
   };
 
-  fs.readFile('users.json', 'utf8', (err, data) => {
-    if (err && err.code !== 'ENOENT') {
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
       console.error(err);
       return res.sendStatus(500);
     }
@@ -61,29 +60,29 @@ app.post('/signup', (req, res) => {
 
     users.push(newUser);
 
-    fs.writeFile('users.json', JSON.stringify(users), 'utf8', (err) => {
+    fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
       if (err) {
         console.error(err);
         return res.sendStatus(500);
       }
 
-      console.log('User added successfully');
-      res.redirect('/login');
+      console.log("User added successfully");
+      res.redirect("/login");
     });
   });
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   // Process login form data
   const { username, password } = req.body;
 
   // Authenticate user
-  fs.readFile('users.json', 'utf8', (err, data) => {
-    if (err && err.code !== 'ENOENT') {
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
       console.error(err);
       return res.sendStatus(500);
     }
@@ -98,19 +97,21 @@ app.post('/login', (req, res) => {
       }
     }
 
-    const foundUser = users.find(user => user.username === username && user.password === password);
+    const foundUser = users.find(
+      (user) => user.username === username && user.password === password
+    );
     if (foundUser) {
       // Authentication successful, redirect to home page
-      res.redirect('/home');
+      res.redirect("/home");
     } else {
       // Authentication failed, display an error message
-      res.send('Login failed. Please check your username and password.');
+      res.send("Login failed. Please check your username and password.");
     }
   });
 });
 
-app.get('/home', (req, res) => {
-  res.sendFile(__dirname + '/home.html');
+app.get("/home", (req, res) => {
+  res.sendFile(__dirname + "/pages/home.html");
 });
 
 // Start the server
