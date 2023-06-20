@@ -1,4 +1,4 @@
-const cliFunctions = require("../cliFunction");
+const cliFunctions = require("../cliFunctions/config.js");
 
 function handleConfigCommand(options) {
   if (options.includes("--help")) {
