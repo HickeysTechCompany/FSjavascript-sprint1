@@ -1,4 +1,4 @@
-const cliFunctions = require("../cliFunction");
+const cliFunctions = require("../cliFunctions/init.js");
 
 function handleInitCommand(options) {
   if (options.includes("--all")) {

@@ -9,17 +9,6 @@ const readline = require("readline");
 const { EventEmitter } = require("events");
 
 const myEmitter = new EventEmitter();
-// All functions to make the CLI menu work
-
-// Function to create directory structure
-function createDirectoryStructure() {
-  // Enter code here...
-}
-
-// Function to create help filesc
-function createHelpFiles() {
-  // Enter code here...
-}
 
 //cole will take in the these token related functions dont worry about it
 // Function that counts tokens
@@ -49,12 +38,6 @@ function searchToken(searchType, value) {
 }
 
 module.exports = {
-  createDirectoryStructure,
-  createConfigFile,
-  createHelpFiles,
-  viewConfigSettings,
-  resetConfigFile,
-  setConfigSetting,
   countTokens,
   generateToken,
   updateToken,

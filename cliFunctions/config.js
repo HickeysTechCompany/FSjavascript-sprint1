@@ -1,68 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const readline = require("readline");
-
-// Function to create config file
-
-function createConfigFile() {
-  const template = require("../templates.js");
-
-  const configDir = path.join(__dirname, "json");
-  const configFilePath = path.join(configDir, "config.json");
-
-  // Ensure that the 'json' directory exists
-  if (!fs.existsSync(configDir)) {
-    fs.mkdirSync(configDir);
-  }
-
-  // Check if the config file already exists
-  fs.access(configFilePath, fs.constants.F_OK, (err) => {
-    if (!err) {
-      console.log("Config file already exists.");
-      return;
-    }
-
-    const defaultConfig = template;
-
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    // Prompt the user for input and update the config attributes
-    rl.question("Enter the name: ", (name) => {
-      defaultConfig.name = name;
-      rl.question("Enter the version: ", (version) => {
-        defaultConfig.version = version;
-        rl.question("Enter the description: ", (description) => {
-          defaultConfig.description = description;
-          rl.question("Enter the main: ", (main) => {
-            defaultConfig.main = main;
-            rl.question("Enter the superuser: ", (superuser) => {
-              defaultConfig.superuser = superuser;
-              rl.question("Enter the database: ", (database) => {
-                defaultConfig.database = database;
-
-                rl.close();
-
-                // Write the modified template data to the config file
-                fs.writeFile(
-                  configFilePath,
-                  JSON.stringify(defaultConfig, null, 2),
-                  (err) => {
-                    if (err) throw err;
-                    console.log("Created a new configuration file.");
-                    resetConfig(); // Call resetConfig() again to write the contents to config.js
-                  }
-                );
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-}
+const myEmitter = new EventEmitter();
+global.DEBUG = false;
 
 // Function to view current config settings
 
@@ -109,3 +48,66 @@ function resetConfigFile() {
     );
   });
 }
+
+// Function to update specific config setting
+function setConfigSetting(option, value) {
+  if (DEBUG) console.log("config.setConfigSettings()");
+
+  // Read the contents of the "config.json" file
+  fs.readFile(
+    path.join(__dirname, "../json/config.json"),
+    "utf-8",
+    (error, data) => {
+      if (error) throw error;
+
+      // Parse the data from the config file
+      let cfg = JSON.parse(data);
+
+      // Check if the key exists in the config object
+      if (cfg.hasOwnProperty(option)) {
+        // Update the value for the specified key
+        cfg[option] = value;
+
+        if (DEBUG) console.log(cfg);
+
+        // Convert the modified config object back to a string
+        let updatedConfig = JSON.stringify(cfg, null, 2);
+
+        // Write the updated config to the file
+        fs.writeFile(
+          path.join(__dirname, "../json/config.json"),
+          updatedConfig,
+          (error) => {
+            if (error) throw error;
+
+            if (DEBUG) console.log("Config File Updated Successfully.");
+
+            // Emit a log event with an info message
+            myEmitter.emit(
+              "log",
+              "config.setConfigSettings()",
+              "INFO",
+              `config.json "${option}": updated to "${value}"`
+            );
+          }
+        );
+      } else {
+        console.log(`Key is not valid: ${option}, Please Try Another.`);
+
+        // Emit a log event with a warning message
+        myEmitter.emit(
+          "log",
+          "config.setConfigSetting()",
+          "WARNING",
+          `Key Invalid Please Try again: ${option}`
+        );
+      }
+    }
+  );
+}
+
+module.exports = {
+  viewConfigSettings,
+  resetConfigFile,
+  setConfigSetting,
+};
