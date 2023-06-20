@@ -1,3 +1,5 @@
+const EventEmitter = require("events");
+const myArgs = process.argv.slice(2);
 // All functions to make the CLI menu work
 
 // Function to create directory structure
@@ -69,9 +71,33 @@ function createHelpFiles() {
 }
 
 // Function to view current config settings
+
 function viewConfigSettings() {
-  // Enter code here...
+  const emitter = new EventEmitter();
+
+  // Check if DEBUG is truthy, and if so, log a debug message
+  if (DEBUG) console.log("config.viewConfigSettings()");
+
+  // Read the contents of the "config.js" file
+  fs.readFile(__dirname + "/js/config.js", (error, data) => {
+    // Handle any errors that occurred during file reading
+    if (error) {
+      emitter.emit("fileNotFound", error); // Emit 'fileNotFound' event with the error
+      return; // Stop execution of the function
+    }
+
+    // Parse the data using the js.parse() function and log the result
+    console.log(js.parse(data));
+  });
+
+  return emitter; // Return the event emitter for handling the custom event
 }
+
+// Example usage:
+const configEmitter = viewConfigSettings();
+configEmitter.on("fileNotFound", (error) => {
+  console.error("File not found:", error);
+});
 
 // Function to reset config file to default settings
 function resetConfigFile() {
@@ -109,7 +135,58 @@ function resetConfigFile() {
 
 // Function to update specific config setting
 function setConfigSetting(option, value) {
-  // Enter code here...
+  if (DEBUG) console.log("config.setConfigSettings()");
+
+  // Read the contents of the "config.js" file
+  fs.readFile(__dirname + "/js/config.js", (error, data) => {
+    if (error) throw error;
+
+    if (DEBUG) console.log(js.parse(data));
+
+    // Parse the data from the config file
+    let cfg = js.parse(data);
+
+    // Iterate over the keys of the config object
+    for (let key of Object.keys(cfg)) {
+      if (key === myArgs[2]) {
+        // Update the value for the specified key
+        cfg[key] = myArgs[3];
+        match = true;
+      }
+    }
+
+    if (!match) {
+      console.log(`Key is not valid: ${myArgs[2]}, Please Try Another.`);
+
+      // Emit a log event with a warning message
+      myEmitter.emit(
+        "log",
+        "config.setConfigSetting()",
+        "WARNING",
+        `Key Invalid Please Try again: ${myArgs[2]}`
+      );
+    }
+
+    if (DEBUG) console.log(cfg);
+
+    // Convert the modified config object back to a string
+    option = js.stringify(cfg, null, 2);
+
+    // Write the updated config to the file
+    fs.writeFile(__dirname + "/js/config.js", data, (error) => {
+      if (error) throw error;
+
+      if (DEBUG) console.log("Config File Updated Successfully.");
+
+      // Emit a log event with an info message
+      myEmitter.emit(
+        "log",
+        "config.setConfigSettings()",
+        "INFO",
+        `config.json "${myArgs[2]}": updated to "${myArgs[3]}"`
+      );
+    });
+  });
 }
 
 // Function that counts tokens
