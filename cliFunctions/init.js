@@ -1,7 +1,6 @@
 // Function to create config file
 const fs = require("fs");
 const path = require("path");
-const readline = require("readline");
 
 function createConfigFile() {
   const template = require("../templates.js");
@@ -21,44 +20,10 @@ function createConfigFile() {
       return;
     }
 
-    const defaultConfig = template;
-
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    // Prompt the user for input and update the config attributes
-    rl.question("Enter the name: ", (name) => {
-      defaultConfig.name = name;
-      rl.question("Enter the version: ", (version) => {
-        defaultConfig.version = version;
-        rl.question("Enter the description: ", (description) => {
-          defaultConfig.description = description;
-          rl.question("Enter the main: ", (main) => {
-            defaultConfig.main = main;
-            rl.question("Enter the superuser: ", (superuser) => {
-              defaultConfig.superuser = superuser;
-              rl.question("Enter the database: ", (database) => {
-                defaultConfig.database = database;
-
-                rl.close();
-
-                // Write the modified template data to the config file
-                fs.writeFile(
-                  configFilePath,
-                  JSON.stringify(defaultConfig, null, 2),
-                  (err) => {
-                    if (err) throw err;
-                    console.log("Created a new configuration file.");
-                    resetConfig(); // Call resetConfig() again to write the contents to config.js
-                  }
-                );
-              });
-            });
-          });
-        });
-      });
+    // Write the default template data to the config file
+    fs.writeFile(configFilePath, JSON.stringify(template, null, 2), (err) => {
+      if (err) throw err;
+      console.log("Created a new configuration file.");
     });
   });
 }
