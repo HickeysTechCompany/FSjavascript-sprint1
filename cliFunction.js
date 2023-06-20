@@ -1,3 +1,13 @@
+//cole needs these for the CRC encoding :D
+//remember npm install!!
+const crypto = require("crypto");
+const crc32 = require("crc-32");
+
+const fs = require("fs");
+const readline = require("readline");
+const { EventEmitter } = require("events");
+
+const myEmitter = new EventEmitter();
 // All functions to make the CLI menu work
 
 // Function to create directory structure
@@ -111,8 +121,15 @@ function resetConfigFile() {
 function setConfigSetting(option, value) {
   // Enter code here...
 }
-
+//cole will take in the these token related functions dont worry about it 
 // Function that counts tokens
+function encodeCRC(input) {
+  const inputData = Buffer.from(input, "utf8");
+  const token = crc32.buf(inputData).toString(16);
+  return token;
+}
+
+
 function countTokens() {
   // Enter code here...
 }
@@ -143,4 +160,5 @@ module.exports = {
   generateToken,
   updateToken,
   searchToken,
+  encodeCRC,
 };
