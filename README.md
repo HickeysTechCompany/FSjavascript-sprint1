@@ -1,2 +1,3 @@
 # FSjavascript-sprint1
-a fully working cli
+
+# GROUP 3: Cole Hickey, Tyler Nolan, Taylor Follet, Jonathan Ivany
