@@ -1,3 +1,4 @@
+const EventEmitter = require("events");
 // All functions to make the CLI menu work
 
 // Function to create directory structure
@@ -35,9 +36,33 @@ function createHelpFiles() {
 }
 
 // Function to view current config settings
+
 function viewConfigSettings() {
-  // Enter code here...
+  const emitter = new EventEmitter();
+
+  // Check if DEBUG is truthy, and if so, log a debug message
+  if (DEBUG) console.log("config.viewConfigSettings()");
+
+  // Read the contents of the "config.js" file
+  fs.readFile(__dirname + "/js/config.js", (error, data) => {
+    // Handle any errors that occurred during file reading
+    if (error) {
+      emitter.emit("fileNotFound", error); // Emit 'fileNotFound' event with the error
+      return; // Stop execution of the function
+    }
+
+    // Parse the data using the js.parse() function and log the result
+    console.log(js.parse(data));
+  });
+
+  return emitter; // Return the event emitter for handling the custom event
 }
+
+// Example usage:
+const configEmitter = viewConfigSettings();
+configEmitter.on("fileNotFound", (error) => {
+  console.error("File not found:", error);
+});
 
 // Function to reset config file to default settings
 function resetConfig() {
