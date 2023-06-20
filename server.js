@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const crypto = require("crypto");
 const crc32 = require("crc-32");
+const { compileFunction } = require("vm");
 
 const app = express();
 const port = 3000;
@@ -30,8 +31,9 @@ app.post("/signup", (req, res) => {
   // Convert input data to a Buffer object
   const inputData = Buffer.from(username + password + cell + email, "utf8");
 
-  // Generate unique token using CRC32
-  const token = crc32.buf(inputData).toString(16);
+// Generate unique token using the encodeCRC function from cryptoUtils
+const token = cliFunction.encodeCRC(inputData);
+
 
   // Store user data in JSON file
   const newUser = {
