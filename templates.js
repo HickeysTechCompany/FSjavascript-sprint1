@@ -1,4 +1,4 @@
-const folders = [commands, json];
+const folders = [`commands`, `json`];
 
 // Template for when user requests node cli --help
 const allhelptxt = `
@@ -88,4 +88,12 @@ const configjson = {
   main: "cli.js",
   superuser: "admin",
   database: "defaultdb",
+};
+
+module.exports = {
+  folders,
+  allhelptxt,
+  confighelptxt,
+  tokenhelptxt,
+  configjson,
 };
