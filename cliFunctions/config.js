@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const myEmitter = new EventEmitter();
 global.DEBUG = false;
 
 // Function to view current config settings
