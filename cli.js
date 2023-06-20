@@ -1,32 +1,20 @@
 const fs = require("fs");
-const readline = require("readline");
+const path = require("path");
 const initHandler = require("./handlers/handleInit.js");
 const configHandler = require("./handlers/handleConfig.js");
 const tokenHandler = require("./handlers/handleToken.js");
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+// Parse command-line arguments
+const [nodePath, scriptPath, subcommand, ...options] = process.argv;
 
-rl.question("Enter a command: ", (input) => {
-  const [command, subcommand, ...options] = input.split(" ");
+// Get the filename without the extension to use as the command
+const filename = path.basename(scriptPath, path.extname(scriptPath));
 
-  switch (command) {
-    case "myapp":
-      if (subcommand === "--help") {
-        displayHelp("./commands/allhelp.txt");
-      } else {
-        handleMainCommand(subcommand, options);
-      }
-      break;
-    default:
-      console.log("Invalid command!");
-      break;
-  }
-
-  rl.close();
-});
+if (subcommand === "--help" || subcommand === undefined) {
+  displayHelp("./commands/allhelp.txt");
+} else {
+  handleMainCommand(subcommand, options);
+}
 
 function handleMainCommand(subcommand, options) {
   switch (subcommand) {
@@ -52,7 +40,7 @@ function handleMainCommand(subcommand, options) {
       }
       break;
     default:
-      console.log("Invalid subcommand!");
+      console.log(`Invalid subcommand for ${filename}!`);
       break;
   }
 }

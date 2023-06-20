@@ -1,10 +1,10 @@
 
-myapp <command> <option>
+cli <command> <option>
 
 Usage:
 
-myapp config --show     displays a list of the current config settings
-myapp config --reset    resets the config file with default settings
-myapp config --set      sets a specific config setting
-myapp config --help
+cli config --show     displays a list of the current config settings
+cli config --reset    resets the config file with default settings
+cli config --set      sets a specific config setting
+cli config --help
 
