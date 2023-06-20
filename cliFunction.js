@@ -2,7 +2,7 @@
 //remember npm install!!
 const crypto = require("crypto");
 const crc32 = require("crc-32");
-
+global.DEBUG = true;
 const fs = require("fs");
 const readline = require("readline");
 const { EventEmitter } = require("events");
@@ -101,12 +101,6 @@ function viewConfigSettings() {
   return emitter; // Return the event emitter for handling the custom event
 }
 
-// Example usage:
-const configEmitter = viewConfigSettings();
-configEmitter.on("fileNotFound", (error) => {
-  console.error("File not found:", error);
-});
-
 // Function to reset config file to default settings
 function resetConfigFile() {
   const originalFilePath = "/path/to/original/config.json";
@@ -196,14 +190,13 @@ function setConfigSetting(option, value) {
     });
   });
 }
-//cole will take in the these token related functions dont worry about it 
+//cole will take in the these token related functions dont worry about it
 // Function that counts tokens
 function encodeCRC(input) {
   const inputData = Buffer.from(input, "utf8");
   const token = crc32.buf(inputData).toString(16);
   return token;
 }
-
 
 function countTokens() {
   // Enter code here...
