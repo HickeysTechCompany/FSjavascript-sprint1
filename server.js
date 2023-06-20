@@ -1,122 +1,59 @@
+// Importing required modules
 const express = require("express");
-const bodyParser = require("body-parser");
-const fs = require("fs");
-const crypto = require("crypto");
-const crc32 = require("crc-32");
-const { compileFunction } = require("vm");
+const path = require("path");
 
+// Creating an instance of express
 const app = express();
-const port = 3000;
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static("public"));
+// Global DEBUG flag
+global.DEBUG = true;
 
-// Routes
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+// Middleware to serve static files from the 'pages' directory
+app.use(express.static(path.join(__dirname, "pages")));
+
+// Middleware to serve static files from the 'styles' directory
+app.use("/styles", express.static(path.join(__dirname, "styles")));
+
+// Middleware to serve static files from the 'scripts' directory
+app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
+
+// Route for the home page
+app.get("/", function (req, res) {
+  // Debug log
+  if (DEBUG) console.log("index.html page was requested.");
+
+  // Send index.html file
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+// Route for the signup page
+app.get("/signup", function (req, res) {
+  // Debug log
+  if (DEBUG) console.log("signup.html page was requested.");
+
+  // Send signup.html file
+  res.sendFile(path.join(__dirname, "pages", "signup.html"));
 });
 
-app.get("/signup", (req, res) => {
-  res.sendFile(__dirname + "/pages/signup.html");
+// Route for the home page
+app.get("/home", function (req, res) {
+  // Debug log
+  if (DEBUG) console.log("home.html page was requested.");
+
+  // Send home.html file
+  res.sendFile(path.join(__dirname, "pages", "home.html"));
 });
 
-app.post("/signup", (req, res) => {
-  const { username, password, cell, email } = req.body;
+// Middleware for handling 404 requests
+app.use(function (req, res, next) {
+  // Debug log
+  if (DEBUG) console.log("Unknown page was requested.");
 
-  // Convert input data to a Buffer object
-  const inputData = Buffer.from(username + password + cell + email, "utf8");
-
-// Generate unique token using the encodeCRC function from cryptoUtils
-const token = cliFunction.encodeCRC(inputData);
-
-
-  // Store user data in JSON file
-  const newUser = {
-    username,
-    password,
-    email,
-    cell,
-    token,
-  };
-
-  fs.readFile("./json/users.json", "utf8", (err, data) => {
-    if (err && err.code !== "ENOENT") {
-      console.error(err);
-      return res.sendStatus(500);
-    }
-
-    let users = [];
-    if (data) {
-      try {
-        users = JSON.parse(data);
-      } catch (parseError) {
-        console.error(parseError);
-        return res.sendStatus(500);
-      }
-    }
-
-    users.push(newUser);
-
-    fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
-      if (err) {
-        console.error(err);
-        return res.sendStatus(500);
-      }
-
-      console.log("User added successfully");
-      res.redirect("/login");
-    });
-  });
+  // Set status to 404 and send notFound.html file
+  res.status(404).sendFile(path.join(__dirname, "pages", "notFound.html"));
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-
-app.post("/login", (req, res) => {
-  // Process login form data
-  const { username, password } = req.body;
-
-  // Authenticate user
-  fs.readFile("./json/users.json", "utf8", (err, data) => {
-    if (err && err.code !== "ENOENT") {
-      console.error(err);
-      return res.sendStatus(500);
-    }
-
-    let users = [];
-    if (data) {
-      try {
-        users = JSON.parse(data);
-      } catch (parseError) {
-        console.error(parseError);
-        return res.sendStatus(500);
-      }
-    }
-
-    const foundUser = users.find(
-      (user) => user.username === username && user.password === password
-    );
-    if (foundUser) {
-      // Authentication successful, redirect to home page
-      res.redirect("/home");
-    } else {
-      // Authentication failed, display an error message
-      res.send("Login failed. Please check your username and password.");
-    }
-  });
-});
-
-app.get("/home", (req, res) => {
-  res.sendFile(__dirname + "/pages/home.html");
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+// Starting the server and listening on port 3000
+app.listen(3000, function () {
+  console.log("Server is listening on port 3000.");
 });
