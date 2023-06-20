@@ -1,7 +1,7 @@
 {
   "name": "sprintweek",
   "version": "1.0.0",
-  "description": "",
+  "description": "a fully working cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,13 @@
     "crypto": "^1.0.1",
     "express": "^4.18.2",
     "fs": "^0.0.1-security"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HickeysTechCompany/FSjavascript-sprint1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HickeysTechCompany/FSjavascript-sprint1/issues"
+  },
+  "homepage": "https://github.com/HickeysTechCompany/FSjavascript-sprint1#readme"
 }
