@@ -96,4 +96,5 @@ module.exports = {
   confighelptxt,
   tokenhelptxt,
   configjson,
+  inithelptxt,
 };

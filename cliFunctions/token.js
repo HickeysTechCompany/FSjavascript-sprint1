@@ -17,6 +17,10 @@ function encodeCRC(input) {
   const token = crc32.buf(inputData).toString(16);
   return token;
 }
+
+// Function that lists tokens with corresponding usernames
+function listTokens() {}:
+
 //function that counts tokens
 
 function countTokens() {
@@ -154,4 +158,5 @@ module.exports = {
   updateToken,
   searchToken,
   encodeCRC,
+  listTokens,
 };
