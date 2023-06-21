@@ -1,4 +1,4 @@
-const cliFunctions = require("../cliFunction");
+const cliFunctions = require("../cliFunctions/token.js");
 
 function handleTokenCommand(options) {
   if (options.includes("--help")) {
