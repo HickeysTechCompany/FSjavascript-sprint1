@@ -62,7 +62,13 @@ function generateToken(username) {
     const foundUser = users.find((user) => user.username === username);
 
     if (foundUser) {
-      const inputData = Buffer.from(foundUser.username + foundUser.password + foundUser.cell + foundUser.email, "utf8");
+      const inputData = Buffer.from(
+        foundUser.username +
+          foundUser.password +
+          foundUser.cell +
+          foundUser.email,
+        "utf8"
+      );
       const token = encodeCRC(inputData);
       console.log(`Token generated for ${username}: ${token}`);
     } else {
@@ -97,13 +103,18 @@ function updateToken(tokenType, username, value) {
         foundUser.email = value;
       }
 
-      fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
-        if (err) {
-          console.error(err);
-          return;
+      fs.writeFile(
+        "./json/users.json",
+        JSON.stringify(users),
+        "utf8",
+        (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          console.log(`Token entry updated for ${username}`);
         }
-        console.log(`Token entry updated for ${username}`);
-      });
+      );
     } else {
       console.log(`User not found: ${username}`);
     }
