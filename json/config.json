@@ -1,0 +1,8 @@
+{
+  "name": "SprintCLI",
+  "version": "1.0.0",
+  "description": "Command line interface for app",
+  "main": "cli.js",
+  "superuser": "admin",
+  "database": "defaultdb"
+}
