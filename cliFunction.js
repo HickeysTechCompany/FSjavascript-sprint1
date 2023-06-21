@@ -17,24 +17,124 @@ function encodeCRC(input) {
   const token = crc32.buf(inputData).toString(16);
   return token;
 }
+//function that counts tokens
 
 function countTokens() {
-  // Enter code here...
-}
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return;
+    }
 
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return;
+      }
+    }
+
+    const tokenCount = users.length;
+
+    console.log(`Total tokens in the system: ${tokenCount}`);
+  });
+}
 // Function that generates a token for a given username
 function generateToken(username) {
-  // Enter code here...
-}
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return;
+    }
 
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return;
+      }
+    }
+
+    const foundUser = users.find((user) => user.username === username);
+
+    if (foundUser) {
+      const inputData = Buffer.from(foundUser.username + foundUser.password + foundUser.cell + foundUser.email, "utf8");
+      const token = encodeCRC(inputData);
+      console.log(`Token generated for ${username}: ${token}`);
+    } else {
+      console.log(`User not found: ${username}`);
+    }
+  });
+}
 // Function that updates token entry (phone or email) for a given username
 function updateToken(tokenType, username, value) {
-  // Enter code here...
-}
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return;
+    }
 
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return;
+      }
+    }
+
+    const foundUser = users.find((user) => user.username === username);
+
+    if (foundUser) {
+      if (tokenType === "phone") {
+        foundUser.cell = value;
+      } else if (tokenType === "email") {
+        foundUser.email = value;
+      }
+
+      fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log(`Token entry updated for ${username}`);
+      });
+    } else {
+      console.log(`User not found: ${username}`);
+    }
+  });
+}
 // Function that searches for token based on username, email, or phone
 function searchToken(searchType, value) {
-  // Enter Code here...
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return;
+    }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return;
+      }
+    }
+
+    const foundUser = users.find((user) => user[searchType] === value);
+
+    if (foundUser) {
+      console.log(`Token found for ${searchType}: ${foundUser.token}`);
+    } else {
+      console.log(`No token found for ${searchType}: ${value}`);
+    }
+  });
 }
 
 module.exports = {
