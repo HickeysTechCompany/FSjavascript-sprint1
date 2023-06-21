@@ -19,22 +19,22 @@ if (subcommand === "--help" || subcommand === undefined) {
 function handleMainCommand(subcommand, options) {
   switch (subcommand) {
     case "init":
-      if (options.includes("--help")) {
-        displayHelp("./commands/initHelp.txt");
+      if (options.length === 0 || options.includes("--help")) {
+        displayHelp("./commands/inithelp.txt");
       } else {
         initHandler(options);
       }
       break;
     case "config":
-      if (options.includes("--help")) {
-        displayHelp("./commands/configHelp.txt");
+      if (options.length === 0 || options.includes("--help")) {
+        displayHelp("./commands/confighelp.txt");
       } else {
         configHandler(options);
       }
       break;
     case "token":
-      if (options.includes("--help")) {
-        displayHelp("./commands/tokenHelp.txt");
+      if (options.length === 0 || options.includes("--help")) {
+        displayHelp("./commands/tokenhelp.txt");
       } else {
         tokenHandler(options);
       }
