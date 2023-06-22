@@ -10,7 +10,7 @@ const myEmitter = new EventEmitter();
 function viewConfigSettings() {
   const emitter = new EventEmitter();
 
-  // Check if DEBUG is truthy, and if so, log a debug message
+  // Check if DEBUG is true, and if so, log a debug message
   if (DEBUG) console.log("config.viewConfigSettings()");
 
   // Define the path to the config.json file
