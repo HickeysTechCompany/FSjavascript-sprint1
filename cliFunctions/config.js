@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 global.DEBUG = false;
+const { EventEmitter } = require("events");
+
+const myEmitter = new EventEmitter();
 
 // Function to view current config settings
 
@@ -50,7 +53,7 @@ function resetConfigFile() {
 
 // Function to update specific config setting
 function setConfigSetting(option, value) {
-  if (DEBUG) console.log("config.setConfigSettings()");
+  if (DEBUG) console.log("User called config --set command");
 
   // Read the contents of the "config.json" file
   fs.readFile(
