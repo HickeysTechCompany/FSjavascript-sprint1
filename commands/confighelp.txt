@@ -1,5 +1,5 @@
 
-cli <command> <option>
+cli config <option>
 
 Usage:
 

@@ -20,12 +20,40 @@ function encodeCRC(input) {
 
 // Function that lists tokens with corresponding usernames
 function listTokens() {
-  // Code for listing tokens
+  const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
+
+  fs.readFile(jsonFilePath, "utf8", (err, data) => {
+    if (err) {
+      console.error(`Error reading users file: ${err}`);
+      return;
+    }
+
+    const users = JSON.parse(data);
+    users.forEach((user) => {
+      console.log(`${user.username} : ${user.token}`);
+    });
+  });
 }
 
 // Function for fetching user record from username
 function fetchToken(username) {
-  //Code for fetching token by username
+  const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
+
+  fs.readFile(jsonFilePath, "utf8", (err, data) => {
+    if (err) {
+      console.error(`Error reading users file: ${err}`);
+      return;
+    }
+
+    const users = JSON.parse(data);
+    const user = users.find((user) => user.username === username);
+
+    if (user) {
+      console.log(user); // Prints the full user record
+    } else {
+      console.log(`No user found with username: ${username}`);
+    }
+  });
 }
 //function that counts tokens
 
@@ -148,12 +176,29 @@ function searchToken(searchType, value) {
       }
     }
 
-    const foundUser = users.find((user) => user[searchType] === value);
+    // Map searchType to corresponding property name
+    let searchProperty;
+    switch (searchType) {
+      case "u":
+        searchProperty = "username";
+        break;
+      case "e":
+        searchProperty = "email";
+        break;
+      case "p":
+        searchProperty = "phone";
+        break;
+      default:
+        console.log(`Invalid search type: ${searchType}`);
+        return;
+    }
+
+    const foundUser = users.find((user) => user[searchProperty] === value);
 
     if (foundUser) {
-      console.log(`Token found for ${searchType}: ${foundUser.token}`);
+      console.log(`Token found for ${searchProperty}: ${foundUser.token}`);
     } else {
-      console.log(`No token found for ${searchType}: ${value}`);
+      console.log(`No token found for ${searchProperty}: ${value}`);
     }
   });
 }
@@ -165,4 +210,5 @@ module.exports = {
   searchToken,
   encodeCRC,
   listTokens,
+  fetchToken,
 };
