@@ -1,4 +1,5 @@
 // Function to create config file
+const { error } = require("console");
 const fs = require("fs");
 const path = require("path");
 
@@ -30,8 +31,19 @@ function createConfigFile() {
 
 // Function to create directory structure
 function createDirectoryStructure() {
-  // Enter code here...
+  fs.mkdir("./configFile", (error) => {
+    if (error) {
+      console.log(error);
+    }
+  });
 }
+
+fk.mkdir("./helpfiles", (error) => {
+  if (error) {
+    console.log(error);
+  }
+});
+//START OF THE DIRECTORY STRUCTURE...
 
 // Function to create help filesc
 function createHelpFiles() {
