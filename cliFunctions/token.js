@@ -6,9 +6,6 @@ global.DEBUG = true;
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
-const { EventEmitter } = require("events");
-
-const myEmitter = new EventEmitter();
 
 //cole will take in the these token related functions dont worry about it
 // Function that counts tokens
@@ -159,47 +156,39 @@ function updateToken(tokenType, username, value) {
   });
 }
 // Function that searches for token based on username, email, or phone
-function searchToken(searchType, value) {
-  fs.readFile("./json/users.json", "utf8", (err, data) => {
-    if (err && err.code !== "ENOENT") {
-      console.error(err);
-      return;
-    }
+async function searchToken(searchType, value) {
+  return new Promise((resolve, reject) => {
+    const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
 
-    let users = [];
-    if (data) {
-      try {
-        users = JSON.parse(data);
-      } catch (parseError) {
-        console.error(parseError);
-        return;
+    fs.readFile(jsonFilePath, "utf8", (err, data) => {
+      if (err) {
+        console.error(`Error reading users file: ${err}`);
+        reject(err);
       }
-    }
 
-    // Map searchType to corresponding property name
-    let searchProperty;
-    switch (searchType) {
-      case "u":
-        searchProperty = "username";
-        break;
-      case "e":
-        searchProperty = "email";
-        break;
-      case "p":
-        searchProperty = "phone";
-        break;
-      default:
-        console.log(`Invalid search type: ${searchType}`);
-        return;
-    }
+      const users = JSON.parse(data);
+      let foundUser;
 
-    const foundUser = users.find((user) => user[searchProperty] === value);
+      switch (searchType) {
+        case "u":
+          foundUser = users.find((user) => user.username === value);
+          break;
+        case "e":
+          foundUser = users.find((user) => user.email === value);
+          break;
+        case "p":
+          foundUser = users.find((user) => user.phone === value);
+          break;
+        default:
+          reject(`Invalid search type: ${searchType}`);
+      }
 
-    if (foundUser) {
-      console.log(`Token found for ${searchProperty}: ${foundUser.token}`);
-    } else {
-      console.log(`No token found for ${searchProperty}: ${value}`);
-    }
+      if (foundUser) {
+        resolve(foundUser);
+      } else {
+        reject(`No user found for ${searchType}: ${value}`);
+      }
+    });
   });
 }
 
