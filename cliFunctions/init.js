@@ -23,33 +23,54 @@ function createConfigFile() {
 
     // Write the configjson data to the config file
     fs.writeFile(configFilePath, JSON.stringify(configjson, null, 2), (err) => {
-      if (err) throw err;
+      if (error) throw error;
       console.log("Created a new configuration file.");
     });
   });
 }
 
 // Function to create directory structure
-function createDirectoryStructure() {
-  fs.mkdir("./configFile", (error) => {
-    if (error) {
-      console.log(error);
+async function createDirectoryStructure() {
+  let createdFolders = 0;
+  let errorCount = 0;
+
+  try {
+    for (const folderName of folders) {
+      const folderPath = `./${folderName}`;
+
+      try {
+        // Check if the folder exists
+        await fs.promises.access(folderPath, fs.constants.F_OK);
+        console.log(`Folder '${folderName}' already exists.`);
+      } catch (error) {
+        // If the folder doesn't exist, create it
+        if (error.code === "ENOENT") {
+          try {
+            await fs.promises.mkdir(folderPath);
+            console.log(`Folder '${folderName}' has been created.`);
+            createdFolders++;
+          } catch (error) {
+            console.error(`Error creating folder '${folderName}':`, error);
+            errorCount++;
+          }
+        } else {
+          console.error(`Error checking folder '${folderName}':`, error);
+          errorCount++;
+        }
+      }
     }
-  });
+
+    console.log(`Total folders created: ${createdFolders}`);
+    console.log(`Total errors creating folders: ${errorCount}`);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
-fk.mkdir("./helpfiles", (error) => {
-  if (error) {
-    console.log(error);
-  }
-});
-//START OF THE DIRECTORY STRUCTURE...
+createDirectoryStructure();
 
 // Function to create help filesc
-function createHelpFiles() {
-  // Enter code here...
-}
-
+function createHelpFiles() {}
 module.exports = {
   createConfigFile,
   createDirectoryStructure,
