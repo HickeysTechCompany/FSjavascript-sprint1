@@ -1,6 +1,6 @@
 const cliFunctions = require("../cliFunctions/init.js");
 
-function handleInitCommand(options) {
+async function handleInitCommand(options) {
   if (options.includes("--all")) {
     cliFunctions.createDirectoryStructure();
     cliFunctions.createConfigFile();
