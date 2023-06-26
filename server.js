@@ -71,8 +71,22 @@ app.use(function (req, res, next) {
   // Debug log
   if (DEBUG) console.log("Unknown page was requested.");
 
-  // Set status to 404 and send notFound.html file
-  res.status(404).sendFile(path.join(__dirname, "pages", "notFound.html"));
+  // Skip redirect if the request is already for the notFound route
+  if (req.path === "/notFound") {
+    return next();
+  }
+
+  // Redirect to notFound.html page
+  res.redirect("/notFound");
+});
+
+// Route for the notFound page
+app.get("/notFound", function (req, res) {
+  // Debug log
+  if (DEBUG) console.log("notFound.html page was requested.");
+
+  // Send notFound.html file
+  res.sendFile(path.join(__dirname, "pages", "notFound.html"));
 });
 
 // Starting the server and listening on port 3000
