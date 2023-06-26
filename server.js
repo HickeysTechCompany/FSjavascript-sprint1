@@ -1,7 +1,8 @@
 // Importing required modules
 const express = require("express");
 const path = require("path");
-
+const bodyParser = require("body-parser");
+const { searchToken } = require("./cliFunctions/token.js");
 // Creating an instance of express
 const app = express();
 
@@ -24,6 +25,27 @@ app.get("/", function (req, res) {
 
   // Send index.html file
   res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.post("/", async function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  try {
+    const user = await searchToken("u", username);
+
+    if (user.password !== password) {
+      res.status(401).send("Wrong password");
+    } else {
+      res.redirect("/home");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(401).send("User not found");
+  }
 });
 
 // Route for the signup page

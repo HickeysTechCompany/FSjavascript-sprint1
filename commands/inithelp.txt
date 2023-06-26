@@ -1,5 +1,5 @@
 
-cli init <option>
+cli init <command> <option>
 
 Usage:
 
@@ -7,4 +7,3 @@ cli init --all          creates the folder structure and config file
 cli init --mk           creates the folder structure
 cli init --cat          creates the config file with default settings
 cli init --help
-

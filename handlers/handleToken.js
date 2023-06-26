@@ -1,6 +1,6 @@
 const cliFunctions = require("../cliFunctions/token.js");
 
-function handleTokenCommand(options) {
+async function handleTokenCommand(options) {
   if (options.includes("--help")) {
     displayTokenHelp();
   } else if (options.includes("--count")) {
@@ -28,7 +28,12 @@ function handleTokenCommand(options) {
   } else if (options.includes("--search")) {
     const searchType = options[options.indexOf("--search") + 1];
     const value = options[options.indexOf("--search") + 2];
-    cliFunctions.searchToken(searchType, value);
+    try {
+      const user = await cliFunctions.searchToken(searchType, value);
+      console.log(user);
+    } catch (err) {
+      console.log(`No user found for ${searchType}: ${value}`);
+    }
   } else {
     console.log("Invalid option for token command!");
   }
