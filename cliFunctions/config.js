@@ -1,13 +1,16 @@
 const fs = require("fs");
 const path = require("path");
 global.DEBUG = false;
+const { EventEmitter } = require("events");
+
+const myEmitter = new EventEmitter();
 
 // Function to view current config settings
 
 function viewConfigSettings() {
   const emitter = new EventEmitter();
 
-  // Check if DEBUG is truthy, and if so, log a debug message
+  // Check if DEBUG is true, and if so, log a debug message
   if (DEBUG) console.log("config.viewConfigSettings()");
 
   // Define the path to the config.json file
@@ -50,7 +53,7 @@ function resetConfigFile() {
 
 // Function to update specific config setting
 function setConfigSetting(option, value) {
-  if (DEBUG) console.log("config.setConfigSettings()");
+  if (DEBUG) console.log("User called config --set command");
 
   // Read the contents of the "config.json" file
   fs.readFile(
