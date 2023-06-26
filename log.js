@@ -1,8 +1,8 @@
 // TO BE USED FOR GENERALIZED LOGGING
-// // main.js or any other file
-// const logMessage = require('log.js');
-
-// logMessage('This is a test message');
+// HOW TO USE
+// In any .js or any other file
+// const logMessage = require('log.js'); to load the module
+// logMessage('This is a test message'); to log your message when that action is taken
 
 //Importa whata wea needa mama mia pizzaria
 const fs = require("fs");
