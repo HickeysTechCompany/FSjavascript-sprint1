@@ -1,4 +1,4 @@
-const folders = [`commands`, `json`];
+const folders = [`commands`, `json`, `logs`, `styles`, `pages`];
 
 // Template for when user requests node cli --help
 const allhelptxt = `
