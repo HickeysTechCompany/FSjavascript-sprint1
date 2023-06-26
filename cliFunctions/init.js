@@ -84,9 +84,13 @@ async function createHelpFiles() {
     ];
 
     // Check if the "commands" help directory exists
-    const isDirExists = await fs
-      .stat(helpDir)
-      .then((stats) => stats.isDirectory());
+    let isDirExists;
+    try {
+      await fs.access(helpDir, fs.constants.F_OK);
+      isDirExists = true;
+    } catch (error) {
+      isDirExists = false;
+    }
 
     if (!isDirExists) {
       // Create the "commands" directory if it doesn't exist
@@ -98,10 +102,10 @@ async function createHelpFiles() {
 
     // Check and create the help files
     for (const helpFile of helpFiles) {
-      const filePath = `${helpDir}/${helpFile.name}`;
+      const filePath = path.join(helpDir, helpFile.name);
 
       try {
-        await fs.stat(filePath);
+        await fs.access(filePath, fs.constants.F_OK);
         console.log(`${helpFile.name} already exists`);
       } catch (error) {
         await fs.writeFile(filePath, helpFile.content);

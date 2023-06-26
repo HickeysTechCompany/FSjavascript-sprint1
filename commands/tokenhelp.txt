@@ -1,4 +1,5 @@
 
+
 cli <command> <option>
 
 Usage:
@@ -13,3 +14,4 @@ cli token --search u <username>       searches a token for a given username
 cli token --search e <email>          searches a token for a given email
 cli token --search p <phone>          searches a token for a given phone number
 cli token --help
+
