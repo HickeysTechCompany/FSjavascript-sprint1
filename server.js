@@ -1,29 +1,76 @@
 // Importing required modules
 const express = require("express");
-const path = require("path");
+const bodyParser = require("body-parser");
+const fs = require("fs");
+const crypto = require("crypto");
+const crc32 = require("crc-32");
 
-// Creating an instance of express
 const app = express();
+const port = 3000;
 
-// Global DEBUG flag
-global.DEBUG = true;
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static("public"));
 
-// Middleware to serve static files from the 'pages' directory
-app.use(express.static(path.join(__dirname, "pages")));
+// Routes
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-// Middleware to serve static files from the 'styles' directory
-app.use("/styles", express.static(path.join(__dirname, "styles")));
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-// Middleware to serve static files from the 'scripts' directory
-app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
+app.get("/signup", (req, res) => {
+  res.sendFile(__dirname + "/pages/signup.html");
+});
 
-// Route for the home page
-app.get("/", function (req, res) {
-  // Debug log
-  if (DEBUG) console.log("index.html page was requested.");
+app.post("/signup", (req, res) => {
+  const { username, password, cell, email } = req.body;
 
-  // Send index.html file
-  res.sendFile(path.join(__dirname, "index.html"));
+  // Convert input data to a Buffer object
+  const inputData = Buffer.from(username + password + cell + email, "utf8");
+
+  // Generate unique token using CRC32
+  const token = crc32.buf(inputData).toString(16);
+
+  // Store user data in JSON file
+  const newUser = {
+    username,
+    password,
+    email,
+    cell,
+    token,
+  };
+
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return res.sendStatus(500);
+    }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return res.sendStatus(500);
+      }
+    }
+
+    users.push(newUser);
+
+    fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
+      if (err) {
+        console.error(err);
+        return res.sendStatus(500);
+      }
+
+      console.log("User added successfully");
+      res.redirect("/login");
+    });
+  });
 });
 
 // Route for the signup page

@@ -13,3 +13,7 @@ cli token --search u <username>       searches a token for a given username
 cli token --search e <email>          searches a token for a given email
 cli token --search p <phone>          searches a token for a given phone number
 cli token --help
+<<<<<<< HEAD
+=======
+
+>>>>>>> d5854e8e37852c9ab9a1fcda1492471309a13a97
