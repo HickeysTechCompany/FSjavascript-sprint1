@@ -1,57 +1,99 @@
+
 body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
 }
 
-.test {
-  width: 300px;
-  margin: 0 auto;
+header {
+  background-color: #333;
+  color: #fff;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
   text-align: center;
 }
 
-form {
-  margin-top: 20px;
+header h1 {
+  margin: 0;
 }
 
-label {
-  display: block;
+nav {
+  background-color: #b6b4b4;
+  padding: 10px;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+main {
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
   margin-bottom: 10px;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-  width: 100%;
-  padding: 10px;
+address {
+  font-style: normal;
+  margin-top: 10px;
+}
+
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+.book-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.book {
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.book img {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
   margin-bottom: 10px;
 }
 
-input[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #4caf50;
-  color: #000000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.book h3 {
+  margin: 0;
 }
 
-button {
-  width: 100%;
+.price {
+  font-weight: bold;
+}
+
+.hidden-info {
+  display: none;
+  margin-top: 10px;
+  background-color: #f2f2f2;
   padding: 10px;
-  background-color: #ff0000;
-  color: #fff;
-  border: none;
   border-radius: 5px;
-  cursor: pointer;
 }
