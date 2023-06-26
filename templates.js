@@ -35,7 +35,7 @@ cli token --search p <phone>          searches a token for a given phone number
 // Template for when user request node cli config --help
 const confighelptxt = `
 
-cli config <option>
+cli <command> <option>
 
 Usage:
 
@@ -49,7 +49,7 @@ cli config --help
 //Template for when user request node cli init --help
 const inithelptxt = `
 
-cli init <option>
+cli init <command> <option>
 
 Usage:
 
@@ -63,7 +63,7 @@ cli init --help
 //Template for when user request node cli token --help
 const tokenhelptxt = `
 
-cli token <option>
+cli <command> <option>
 
 Usage:
 

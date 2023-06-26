@@ -6,6 +6,9 @@ global.DEBUG = true;
 const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
+const { EventEmitter } = require("events");
+
+const myEmitter = new EventEmitter();
 
 //cole will take in the these token related functions dont worry about it
 // Function that counts tokens
@@ -17,40 +20,12 @@ function encodeCRC(input) {
 
 // Function that lists tokens with corresponding usernames
 function listTokens() {
-  const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
-
-  fs.readFile(jsonFilePath, "utf8", (err, data) => {
-    if (err) {
-      console.error(`Error reading users file: ${err}`);
-      return;
-    }
-
-    const users = JSON.parse(data);
-    users.forEach((user) => {
-      console.log(`${user.username} : ${user.token}`);
-    });
-  });
+  // Code for listing tokens
 }
 
 // Function for fetching user record from username
 function fetchToken(username) {
-  const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
-
-  fs.readFile(jsonFilePath, "utf8", (err, data) => {
-    if (err) {
-      console.error(`Error reading users file: ${err}`);
-      return;
-    }
-
-    const users = JSON.parse(data);
-    const user = users.find((user) => user.username === username);
-
-    if (user) {
-      console.log(user); // Prints the full user record
-    } else {
-      console.log(`No user found with username: ${username}`);
-    }
-  });
+  //Code for fetching token by username
 }
 //function that counts tokens
 
@@ -156,39 +131,30 @@ function updateToken(tokenType, username, value) {
   });
 }
 // Function that searches for token based on username, email, or phone
-async function searchToken(searchType, value) {
-  return new Promise((resolve, reject) => {
-    const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
+function searchToken(searchType, value) {
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return;
+    }
 
-    fs.readFile(jsonFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error(`Error reading users file: ${err}`);
-        reject(err);
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return;
       }
+    }
 
-      const users = JSON.parse(data);
-      let foundUser;
+    const foundUser = users.find((user) => user[searchType] === value);
 
-      switch (searchType) {
-        case "u":
-          foundUser = users.find((user) => user.username === value);
-          break;
-        case "e":
-          foundUser = users.find((user) => user.email === value);
-          break;
-        case "p":
-          foundUser = users.find((user) => user.phone === value);
-          break;
-        default:
-          reject(`Invalid search type: ${searchType}`);
-      }
-
-      if (foundUser) {
-        resolve(foundUser);
-      } else {
-        reject(`No user found for ${searchType}: ${value}`);
-      }
-    });
+    if (foundUser) {
+      console.log(`Token found for ${searchType}: ${foundUser.token}`);
+    } else {
+      console.log(`No token found for ${searchType}: ${value}`);
+    }
   });
 }
 
@@ -199,5 +165,4 @@ module.exports = {
   searchToken,
   encodeCRC,
   listTokens,
-  fetchToken,
 };

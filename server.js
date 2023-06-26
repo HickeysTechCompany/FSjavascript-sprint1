@@ -1,51 +1,76 @@
 // Importing required modules
 const express = require("express");
-const path = require("path");
 const bodyParser = require("body-parser");
-const { searchToken } = require("./cliFunctions/token.js");
-// Creating an instance of express
+const fs = require("fs");
+const crypto = require("crypto");
+const crc32 = require("crc-32");
+
 const app = express();
+const port = 3000;
 
-// Global DEBUG flag
-global.DEBUG = true;
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static("public"));
 
-// Middleware to serve static files from the 'pages' directory
-app.use(express.static(path.join(__dirname, "pages")));
-
-// Middleware to serve static files from the 'styles' directory
-app.use("/styles", express.static(path.join(__dirname, "styles")));
-
-// Middleware to serve static files from the 'scripts' directory
-app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
-
-// Route for the home page
-app.get("/", function (req, res) {
-  // Debug log
-  if (DEBUG) console.log("index.html page was requested.");
-
-  // Send index.html file
-  res.sendFile(path.join(__dirname, "index.html"));
+// Routes
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-app.post("/", async function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+app.get("/signup", (req, res) => {
+  res.sendFile(__dirname + "/pages/signup.html");
+});
 
-  try {
-    const user = await searchToken("u", username);
+app.post("/signup", (req, res) => {
+  const { username, password, cell, email } = req.body;
 
-    if (user.password !== password) {
-      res.status(401).send("Wrong password");
-    } else {
-      res.redirect("/home");
+  // Convert input data to a Buffer object
+  const inputData = Buffer.from(username + password + cell + email, "utf8");
+
+  // Generate unique token using CRC32
+  const token = crc32.buf(inputData).toString(16);
+
+  // Store user data in JSON file
+  const newUser = {
+    username,
+    password,
+    email,
+    cell,
+    token,
+  };
+
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return res.sendStatus(500);
     }
-  } catch (error) {
-    console.error(error);
-    res.status(401).send("User not found");
-  }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return res.sendStatus(500);
+      }
+    }
+
+    users.push(newUser);
+
+    fs.writeFile("./json/users.json", JSON.stringify(users), "utf8", (err) => {
+      if (err) {
+        console.error(err);
+        return res.sendStatus(500);
+      }
+
+      console.log("User added successfully");
+      res.redirect("/login");
+    });
+  });
 });
 
 // Route for the signup page
