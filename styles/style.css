@@ -3,10 +3,12 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-image: url(/images/isright.jpg);
+  background-size: cover;
 }
 
 header {
-  background-color: #333;
+  background-color: #0000006c;
   color: #fff;
   padding: 20px;
   text-align: center;
@@ -14,21 +16,24 @@ header {
 
 header h1 {
   margin: 0;
+  color: white;
 }
 
 nav {
-  background-color: #b6b4b4;
+  background-color: #0000006c;
   padding: 10px;
+  color: white;
 }
 
 nav a {
-  color: #333;
+  color: #ffffff;
   text-decoration: none;
   margin-right: 10px;
 }
 
 main {
   padding: 20px;
+  color: white;
 }
 
 h2 {
@@ -38,10 +43,12 @@ h2 {
 ul {
   list-style-type: none;
   padding: 0;
+  color: white;
 }
 
 li {
   margin-bottom: 10px;
+  color: white;
 }
 
 address {
@@ -62,14 +69,13 @@ footer p {
 
 .book-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(column, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px;
+  color: white;
 }
 
 .book {
-  border: 1px solid #ccc;
-  border-radius: 5px;
   padding: 10px;
   text-align: center;
   cursor: pointer;
@@ -93,7 +99,7 @@ footer p {
 .hidden-info {
   display: none;
   margin-top: 10px;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   padding: 10px;
   border-radius: 5px;
 }
