@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-global.DEBUG = false;
+global.DEBUG = true;
 const { EventEmitter } = require("events");
 
 const myEmitter = new EventEmitter();
@@ -34,8 +34,9 @@ function viewConfigSettings() {
 // Function to reset config file to default settings
 function resetConfigFile() {
   const configFilePath = path.join(__dirname, "../json/config.json");
-
   // Convert the templateConfig object to a string
+  const { configjson } = require("../templates.js");
+  const templateConfig = configjson;
   const data = JSON.stringify(templateConfig, null, 2);
 
   // Write the template config to the config.json file
