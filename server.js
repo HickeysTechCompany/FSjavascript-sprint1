@@ -28,7 +28,7 @@ app.use("/images", express.static(path.join(__dirname, "pages", "images")));
 
 // Middleware to serve static files from the 'scripts' directory
 
-app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
+app.use("/pagescripts", express.static(path.join(__dirname, "pagescripts")));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

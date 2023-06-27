@@ -20,7 +20,7 @@ signupForm.addEventListener("submit", (event) => {
     .then((data) => {
       if (data.success) {
         // Redirect to the login page
-        window.location.href = "/login";
+        window.location.href = "/";
       } else {
         // Handle registration error
         console.error("Registration failed: " + data.message);
