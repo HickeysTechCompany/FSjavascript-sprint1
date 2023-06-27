@@ -1,62 +1,63 @@
 const cliFunctions = require("../cliFunctions/init.js");
+const chalk = require("chalk");
 
 async function handleInitCommand(options) {
   try {
     if (options.includes("--all")) {
-      console.log("\nInitializing Directory Structure...");
+      console.log(chalk.yellow("\nInitializing Directory Structure..."));
       const directoryStructureInitialized =
         await cliFunctions.createDirectoryStructure();
       if (!directoryStructureInitialized) {
-        console.log("Error initializing function structure\n");
+        console.log(chalk.red("Error initializing function structure\n"));
         return;
       }
-      console.log("Directory Structure Initialized\n");
+      console.log(chalk.green("Directory Structure Initialized\n"));
 
-      console.log("Initializing Config Files...");
+      console.log(chalk.yellow("Initializing Config Files..."));
       const configFilesInitialized = await cliFunctions.createConfigFile();
       if (!configFilesInitialized) {
-        console.log("Error initializing config files\n");
+        console.log(chalk.red("Error initializing config files\n"));
         return;
       }
-      console.log("Config Files Initialized\n");
+      console.log(chalk.green("Config Files Initialized\n"));
 
-      console.log("Initializing Help Files...");
+      console.log(chalk.yellow("Initializing Help Files..."));
       const helpFilesInitialized = await cliFunctions.createHelpFiles();
       if (!helpFilesInitialized) {
-        console.log("Error initializing help files\n");
+        console.log(chalk.red("Error initializing help files\n"));
         return;
       }
-      console.log("Help Files Initialized\n");
+      console.log(chalk.green("Help Files Initialized\n"));
     } else if (options.includes("--mk")) {
-      console.log("\nInitializing Directory Structure...");
+      console.log(chalk.yellow("\nInitializing Directory Structure..."));
       const directoryStructureInitialized =
         await cliFunctions.createDirectoryStructure();
       if (!directoryStructureInitialized) {
-        console.log("Error initializing function structure\n");
+        console.log(chalk.red("Error initializing function structure\n"));
         return;
       }
-      console.log("Function Structure Initialized\n");
+      console.log(chalk.green("Function Structure Initialized\n"));
     } else if (options.includes("--cat")) {
-      console.log("Initializing Config Files...");
+      console.log(chalk.yellow("Initializing Config Files..."));
       const configFilesInitialized = await cliFunctions.createConfigFile();
       if (!configFilesInitialized) {
-        console.log("Error initializing config files\n");
+        console.log(chalk.red("Error initializing config files\n"));
         return;
       }
-      console.log("Config Files Initialized\n");
+      console.log(chalk.green("Config Files Initialized\n"));
 
-      console.log("Initializing Help Files...");
+      console.log(chalk.yellow("Initializing Help Files..."));
       const helpFilesInitialized = await cliFunctions.createHelpFiles();
       if (!helpFilesInitialized) {
-        console.log("Error initializing help files\n");
+        console.log(chalk.red("Error initializing help files\n"));
         return;
       }
-      console.log("Help Files Initialized\n");
+      console.log(chalk.green("Help Files Initialized\n"));
     } else {
-      console.log("Invalid option for init command!");
+      console.log(chalk.red("Invalid option for init command!"));
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.error(chalk.red("Error:", error));
   }
 }
 

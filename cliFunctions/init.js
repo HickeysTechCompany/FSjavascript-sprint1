@@ -1,6 +1,6 @@
-// Function to create config file
 const fs = require("fs").promises;
 const path = require("path");
+const chalk = require("chalk");
 
 // Function to create the config file
 async function createConfigFile() {
@@ -17,11 +17,11 @@ async function createConfigFile() {
 
   try {
     await fs.access(configFilePath); // Check if the config file already exists
-    console.log("Config file already exists.");
+    console.log(chalk.blue("Config file already exists."));
     return true; // Return true even if the file already exists
   } catch (err) {
     await fs.writeFile(configFilePath, JSON.stringify(configjson, null, 2)); // Write the configjson data to the config file
-    console.log("Created a new configuration file.");
+    console.log(chalk.green("Created a new configuration file."));
     return true;
   }
 }
@@ -29,6 +29,7 @@ async function createConfigFile() {
 // Function to create the directory structure
 async function createDirectoryStructure() {
   let createdFolders = 0;
+  let existingFolders = 0;
   let errorCount = 0;
   const { folders } = require("../templates.js");
 
@@ -40,28 +41,46 @@ async function createDirectoryStructure() {
 
       try {
         await fs.access(folderPath, fs.constants.F_OK); // Check if the folder already exists
-        console.log(`Folder '${folderName}' already exists.`);
+        console.log(chalk.blue(`Folder '${folderName}' already exists.`));
+        existingFolders++;
       } catch (error) {
         if (error.code === "ENOENT") {
           try {
             await fs.mkdir(folderPath); // If the folder doesn't exist, create it
-            console.log(`Folder '${folderName}' has been created.`);
+            console.log(
+              chalk.green(`Folder '${folderName}' has been created.`)
+            );
             createdFolders++;
           } catch (error) {
-            console.error(`Error creating folder '${folderName}':`, error);
+            console.error(
+              chalk.red(`Error creating folder '${folderName}':`, error)
+            );
             errorCount++;
           }
         } else {
-          console.error(`Error checking folder '${folderName}':`, error);
+          console.error(
+            chalk.red(`Error checking folder '${folderName}':`, error)
+          );
           errorCount++;
         }
       }
     }
-    console.log(`Total folders created: ${createdFolders}`);
-    console.log(`Total errors creating folders: ${errorCount}`);
+    console.log(
+      chalk.magenta(`Total folders found: ${existingFolders}/${folders.length}`)
+    );
+    console.log(
+      chalk.magenta(
+        `Total folders created: ${createdFolders}/${folders.length}`
+      )
+    );
+    console.log(
+      chalk.magenta(
+        `Total errors creating folders: ${errorCount}/${folders.length}`
+      )
+    );
     return true;
   } catch (error) {
-    console.error("Error:", error);
+    console.error(chalk.red("Error:", error));
     return false;
   }
 }
@@ -94,9 +113,9 @@ async function createHelpFiles() {
 
     if (!isDirExists) {
       await fs.mkdir(helpDir); // If not, create the "commands" directory
-      console.log(`Directory ${helpDir} created for help files`);
+      console.log(chalk.green(`Directory ${helpDir} created for help files`));
     } else {
-      console.log(`Directory ${helpDir} found for help files`);
+      console.log(chalk.blue(`Directory ${helpDir} found for help files`));
     }
 
     for (const helpFile of helpFiles) {
@@ -104,10 +123,10 @@ async function createHelpFiles() {
 
       try {
         await fs.access(filePath, fs.constants.F_OK); // Check if the help file already exists
-        console.log(`${helpFile.name} already exists`);
+        console.log(chalk.blue(`${helpFile.name} already exists`));
       } catch (error) {
         await fs.writeFile(filePath, helpFile.content); // If not, create the help file
-        console.log(`${helpFile.name} was created`);
+        console.log(chalk.green(`${helpFile.name} was created`));
       }
     }
 
