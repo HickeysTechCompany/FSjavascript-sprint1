@@ -106,3 +106,25 @@
 2023-06-27T19:03:32.239Z - User routed to home page.
 2023-06-27T19:09:18.957Z - User has landed.
 2023-06-27T19:09:24.245Z - User routed to home page.
+2023-06-27T19:54:38.600Z - Server has been started on port 3000
+2023-06-27T19:54:42.183Z - User has landed.
+2023-06-27T19:54:56.908Z - signup.html page was requested.
+2023-06-27T19:55:30.203Z - User has landed.
+2023-06-27T19:55:40.543Z - User has landed.
+2023-06-27T19:55:41.638Z - signup.html page was requested.
+2023-06-27T19:56:18.347Z - Unknown page was requested.
+2023-06-27T19:56:18.350Z - notFound.html page was requested.
+2023-06-27T19:56:26.413Z - User routed to home page.
+2023-06-27T19:56:37.703Z - signup.html page was requested.
+2023-06-27T19:56:37.706Z - User routed to home page.
+2023-06-27T19:56:43.369Z - User routed to home page.
+2023-06-27T19:56:47.346Z - signup.html page was requested.
+2023-06-27T19:56:58.878Z - User has landed.
+2023-06-27T19:57:17.044Z - User has landed.
+2023-06-27T19:58:44.683Z - signup.html page was requested.
+2023-06-27T19:59:04.388Z - signup.html page was requested.
+2023-06-27T19:59:04.880Z - signup.html page was requested.
+2023-06-27T19:59:06.824Z - signup.html page was requested.
+2023-06-27T20:00:49.867Z - signup.html page was requested.
+2023-06-27T20:01:38.260Z - signup.html page was requested.
+2023-06-27T20:04:32.476Z - User has landed.
