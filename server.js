@@ -1,44 +1,51 @@
-// Importing required modules
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 const { searchToken } = require("./cliFunctions/token.js");
 const logMessage = require("./log.js"); // Import logMessage function
 const chalk = require("chalk"); // Import chalk module
 
 // Creating an instance of express
+
 const app = express();
+const port = 3000;
 
-// Global DEBUG flag
-global.DEBUG = true;
+// Middleware
+app.use(bodyParser.json()); // Add this line to parse JSON data
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Middleware to serve static files from the 'pages' directory
+// Serve static files from the 'pages' directory
 app.use(express.static(path.join(__dirname, "pages")));
 
-// Middleware to serve static files from the 'styles' directory
+// Serve static files from the 'styles' directory
 app.use("/styles", express.static(path.join(__dirname, "styles")));
+
 
 // Middleware to serve static files from the 'images' directory
 app.use("/images", express.static(path.join(__dirname, "pages", "images")));
 
 
 // Middleware to serve static files from the 'scripts' directory
+
 app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Route for the home page
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   // Debug log
   if (DEBUG) {
     console.log(chalk.bgGreen("index.html page was requested."));
     logMessage("User has landed.");
   }
 
+
   // Send index.html file
   res.sendFile(path.join(__dirname, "index.html"));
 });
+
 
 app.post("/", async function (req, res) {
   const username = req.body.username;
@@ -60,16 +67,66 @@ app.post("/", async function (req, res) {
 });
 
 // Route for the signup page
-app.get("/signup", function (req, res) {
+app.get("/signup", (req, res) => {
   // Debug log
   if (DEBUG) {
     console.log(chalk.bgGreen("signup.html page was requested."));
     logMessage("signup.html page was requested.");
   }
 
+
   // Send signup.html file
   res.sendFile(path.join(__dirname, "pages", "signup.html"));
 });
+
+
+// Handle signup form submission
+app.post("/signup", (req, res) => {
+  const { username, password, cell, email } = req.body;
+
+  // Store user data in JSON file
+  const newUser = {
+    username,
+    password,
+    cell,
+    email
+  };
+
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return res.sendStatus(500);
+    }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return res.sendStatus(500);
+      }
+    }
+
+    users.push(newUser);
+
+    fs.writeFile(
+      "./json/users.json",
+      JSON.stringify(users),
+      "utf8",
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.sendStatus(500);
+        }
+
+        console.log("User added successfully");
+        res.json({ success: true });
+      }
+    );
+  });
+});
+
 
 // Route for the home page
 app.get("/home", function (req, res) {
