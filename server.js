@@ -1,95 +1,90 @@
-// Importing required modules
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const { searchToken } = require("./cliFunctions/token.js");
-// Creating an instance of express
+const fs = require("fs");
+
 const app = express();
+const port = 3000;
 
-// Global DEBUG flag
-global.DEBUG = true;
+// Middleware
+app.use(bodyParser.json()); // Add this line to parse JSON data
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Middleware to serve static files from the 'pages' directory
+// Serve static files from the 'pages' directory
 app.use(express.static(path.join(__dirname, "pages")));
 
-// Middleware to serve static files from the 'styles' directory
+// Serve static files from the 'styles' directory
 app.use("/styles", express.static(path.join(__dirname, "styles")));
 
-// Middleware to serve static files from the 'scripts' directory
+// Serve static files from the 'scripts' directory
 app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
 
 // Route for the home page
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   // Debug log
-  if (DEBUG) console.log("index.html page was requested.");
+  console.log("index.html page was requested.");
 
   // Send index.html file
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.post("/", async function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  try {
-    const user = await searchToken("u", username);
-
-    if (user.password !== password) {
-      res.status(401).send("Wrong password");
-    } else {
-      res.redirect("/home");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(401).send("User not found");
-  }
-});
-
 // Route for the signup page
-app.get("/signup", function (req, res) {
+app.get("/signup", (req, res) => {
   // Debug log
-  if (DEBUG) console.log("signup.html page was requested.");
+  console.log("signup.html page was requested.");
 
   // Send signup.html file
   res.sendFile(path.join(__dirname, "pages", "signup.html"));
 });
 
-// Route for the home page
-app.get("/home", function (req, res) {
-  // Debug log
-  if (DEBUG) console.log("home.html page was requested.");
+// Handle signup form submission
+app.post("/signup", (req, res) => {
+  const { username, password, cell, email } = req.body;
 
-  // Send home.html file
-  res.sendFile(path.join(__dirname, "pages", "home.html"));
+  // Store user data in JSON file
+  const newUser = {
+    username,
+    password,
+    cell,
+    email
+  };
+
+  fs.readFile("./json/users.json", "utf8", (err, data) => {
+    if (err && err.code !== "ENOENT") {
+      console.error(err);
+      return res.sendStatus(500);
+    }
+
+    let users = [];
+    if (data) {
+      try {
+        users = JSON.parse(data);
+      } catch (parseError) {
+        console.error(parseError);
+        return res.sendStatus(500);
+      }
+    }
+
+    users.push(newUser);
+
+    fs.writeFile(
+      "./json/users.json",
+      JSON.stringify(users),
+      "utf8",
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.sendStatus(500);
+        }
+
+        console.log("User added successfully");
+        res.json({ success: true });
+      }
+    );
+  });
 });
 
-// Middleware for handling 404 requests
-app.use(function (req, res, next) {
-  // Debug log
-  if (DEBUG) console.log("Unknown page was requested.");
-
-  // Skip redirect if the request is already for the notFound route
-  if (req.path === "/notFound") {
-    return next();
-  }
-
-  // Redirect to notFound.html page
-  res.redirect("/notFound");
-});
-
-// Route for the notFound page
-app.get("/notFound", function (req, res) {
-  // Debug log
-  if (DEBUG) console.log("notFound.html page was requested.");
-
-  // Send notFound.html file
-  res.sendFile(path.join(__dirname, "pages", "notFound.html"));
-});
-
-// Starting the server and listening on port 3000
-app.listen(3000, function () {
-  console.log("Server is listening on port 3000.");
+// Start the server
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
