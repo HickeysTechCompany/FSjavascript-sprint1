@@ -7,7 +7,7 @@ loginForm.addEventListener("submit", (event) => {
   const password = document.getElementById("password").value;
 
   // Send an AJAX request to the server and handle the response
-  fetch("/login", {
+  fetch("/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

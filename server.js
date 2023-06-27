@@ -9,7 +9,6 @@ const chalk = require("chalk"); // Import chalk module
 // Creating an instance of express
 
 const app = express();
-const port = 3000;
 
 // Middleware
 app.use(bodyParser.json()); // Add this line to parse JSON data
@@ -37,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   // Debug log
   if (DEBUG) {
-    console.log(chalk.bgGreen("index.html page was requested."));
+    console.log(chalk.inverse("index.html page was requested."));
     logMessage("User has landed.");
   }
 
@@ -55,14 +54,14 @@ app.post("/", async function (req, res) {
     const user = await searchToken("u", username);
 
     if (user.password !== password) {
-      res.status(401).send("Wrong password");
+      res.status(401).json({ success: false, message: "Wrong password" });
     } else {
-      res.redirect("/home");
+      res.json({ success: true });
     }
   } catch (error) {
     console.error(chalk.red(error));
     logMessage(`Error: ${error}`);
-    res.status(401).send("User not found");
+    res.status(401).json({ success: false, message: "User not found" });
   }
 });
 
@@ -70,7 +69,7 @@ app.post("/", async function (req, res) {
 app.get("/signup", (req, res) => {
   // Debug log
   if (DEBUG) {
-    console.log(chalk.bgGreen("signup.html page was requested."));
+    console.log(chalk.inverse("signup.html page was requested."));
     logMessage("signup.html page was requested.");
   }
 
@@ -132,7 +131,7 @@ app.post("/signup", (req, res) => {
 app.get("/home", function (req, res) {
   // Debug log
   if (DEBUG) {
-    console.log(chalk.bgGreen("home.html page was requested."));
+    console.log(chalk.inverse("home.html page was requested."));
     logMessage("User routed to home page.");
   }
 
