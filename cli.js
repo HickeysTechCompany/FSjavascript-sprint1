@@ -10,7 +10,9 @@ const [nodePath, scriptPath, subcommand, ...options] = process.argv;
 // Get the filename without the extension to use as the command
 const filename = path.basename(scriptPath, path.extname(scriptPath));
 
-if (subcommand === "--help" || subcommand === undefined) {
+if (subcommand === undefined) {
+  displayHelp("./commands.txt"); // Display commands.txt if subcommand is undefined
+} else if (subcommand === "--help") {
   displayHelp("./commands/allhelp.txt");
 } else {
   handleMainCommand(subcommand, options);

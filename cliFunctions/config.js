@@ -1,12 +1,12 @@
 const fs = require("fs");
 const path = require("path");
-global.DEBUG = false;
+global.DEBUG = true;
 const { EventEmitter } = require("events");
+const logMessage = require("../log.js");
 
 const myEmitter = new EventEmitter();
 
 // Function to view current config settings
-
 function viewConfigSettings() {
   const emitter = new EventEmitter();
 
@@ -25,7 +25,9 @@ function viewConfigSettings() {
     }
 
     // Parse the data using the JSON.parse() function and log the result
-    console.log(JSON.parse(data));
+    const configSettings = JSON.parse(data);
+    console.log(configSettings);
+    logMessage("Viewed config settings");
   });
 
   return emitter; // Return the event emitter for handling the custom event
@@ -34,14 +36,15 @@ function viewConfigSettings() {
 // Function to reset config file to default settings
 function resetConfigFile() {
   const configFilePath = path.join(__dirname, "../json/config.json");
-
-  // Convert the templateConfig object to a string
+  const { configjson } = require("../templates.js");
+  const templateConfig = configjson;
   const data = JSON.stringify(templateConfig, null, 2);
 
   // Write the template config to the config.json file
   fs.writeFile(configFilePath, data, (err) => {
     if (err) throw err;
     console.log("The configuration file has been reset to its original state!");
+    logMessage("Reset config file to original state");
     myEmitter.emit(
       "log",
       "resetConfig()",
@@ -91,6 +94,8 @@ function setConfigSetting(option, value) {
               "INFO",
               `config.json "${option}": updated to "${value}"`
             );
+
+            logMessage(`Updated config setting: ${option} = ${value}`);
           }
         );
       } else {
@@ -103,6 +108,8 @@ function setConfigSetting(option, value) {
           "WARNING",
           `Key Invalid Please Try again: ${option}`
         );
+
+        logMessage(`Invalid config key: ${option}`);
       }
     }
   );

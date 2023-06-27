@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f2f2f2;
+    background-image: url(/images/fuck.jpg);
+    background-size: cover;
   }
   
   h1 {
@@ -13,18 +15,32 @@ body {
   form {
     width: 300px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #0000008c;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
   }
+
+ .logo{
+  display: block;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+ }
   
   label {
     font-weight: bold;
     margin-bottom: 5px;
-    display: block;
+    display: flex;
+    color: white;
   }
   
+  input[type="checkbox"] {
+  margin-right: 5px;
+}
+
   input[type="text"],
   input[type="password"] {
     width: 100%;
@@ -40,9 +56,10 @@ body {
     padding: 10px;
     border: none;
     border-radius: 3px;
-    background-color: #4caf50;
+    background-color: #707070;
     color: #fff;
     cursor: pointer;
+    margin-bottom: 10px;
   }
   
   input[type="submit"]:hover,
@@ -57,4 +74,3 @@ body {
   button:focus {
     outline: none;
   }
-  

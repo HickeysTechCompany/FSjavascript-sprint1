@@ -14,7 +14,7 @@ const access = util.promisify(fs.access);
 
 // Creates or appends a message to the log.txt file.
 async function logMessage(message) {
-  const logFolderPath = path.join(__dirname, "log");
+  const logFolderPath = path.join(__dirname, "logs");
 
   try {
     // Check if log directory exists
