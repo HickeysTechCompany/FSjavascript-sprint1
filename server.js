@@ -18,6 +18,10 @@ app.use(express.static(path.join(__dirname, "pages")));
 // Middleware to serve static files from the 'styles' directory
 app.use("/styles", express.static(path.join(__dirname, "styles")));
 
+// Middleware to serve static files from the 'images' directory
+app.use("/images", express.static(path.join(__dirname, "pages", "images")));
+
+
 // Middleware to serve static files from the 'scripts' directory
 app.use("/pagescripts", express.static(path.join(__dirname, "scripts")));
 
