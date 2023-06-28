@@ -1,0 +1,19 @@
+2023-06-28T16:24:49.936Z - Server has been started on port 3000
+2023-06-28T16:24:53.135Z - User has landed.
+2023-06-28T16:25:02.344Z - signup.html page was requested.
+2023-06-28T16:28:09.710Z - User has landed.
+2023-06-28T16:28:12.562Z - signup.html page was requested.
+2023-06-28T16:37:17.475Z - User has landed.
+2023-06-28T16:37:22.265Z - User routed to home page.
+2023-06-28T16:37:28.141Z - signup.html page was requested.
+2023-06-28T16:41:38.023Z - Server has been started on port 3000
+2023-06-28T16:51:55.508Z - Server has been started on port 3000
+2023-06-28T16:54:28.152Z - Server has been started on port 3000
+2023-06-28T16:54:30.251Z - signup.html page was requested.
+2023-06-28T16:59:55.465Z - Server has been started on port 3000
+2023-06-28T17:03:35.775Z - Server has been started on port 3000
+2023-06-28T17:03:37.512Z - Unknown page was requested.
+2023-06-28T17:03:37.517Z - notFound.html page was requested.
+2023-06-28T17:03:44.795Z - User has landed.
+2023-06-28T17:03:46.782Z - signup.html page was requested.
+2023-06-28T17:06:35.030Z - Generated token for tester

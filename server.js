@@ -5,9 +5,16 @@ const fs = require("fs");
 const { searchToken } = require("./cliFunctions/token.js");
 const logMessage = require("./log.js"); // Import logMessage function
 const chalk = require("chalk"); // Import chalk module
+const DEBUG = true;
+const { encodeCRC } = require("./cliFunctions/token.js");
+
+// Generate a token
+function generateToken(username) {
+  // Implement the logic to generate a token here
+  // ...
+}
 
 // Creating an instance of express
-
 const app = express();
 
 // Middleware
@@ -40,11 +47,9 @@ app.get("/", (req, res) => {
     logMessage("User has landed.");
   }
 
-
   // Send index.html file
   res.sendFile(path.join(__dirname, "index.html"));
 });
-
 
 app.post("/", async function (req, res) {
   const username = req.body.username;
@@ -73,22 +78,24 @@ app.get("/signup", (req, res) => {
     logMessage("signup.html page was requested.");
   }
 
-
   // Send signup.html file
   res.sendFile(path.join(__dirname, "pages", "signup.html"));
 });
 
-
 // Handle signup form submission
 app.post("/signup", (req, res) => {
   const { username, password, cell, email } = req.body;
+
+  // Generate a token using the generateToken function
+  const token = generateToken(username);
 
   // Store user data in JSON file
   const newUser = {
     username,
     password,
     cell,
-    email
+    email,
+    token
   };
 
   fs.readFile("./json/users.json", "utf8", (err, data) => {
@@ -125,7 +132,6 @@ app.post("/signup", (req, res) => {
     );
   });
 });
-
 
 // Route for the home page
 app.get("/home", function (req, res) {
@@ -164,7 +170,7 @@ app.use(function (req, res, next) {
     logMessage("Unknown page was requested.");
   }
 
- // Skip redirect if the request is already for the notFound route
+  // Skip redirect if the request is already for the notFound route
   if (req.path === "/notFound") {
     return next();
   }

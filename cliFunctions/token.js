@@ -14,7 +14,7 @@ function encodeCRC(input) {
   const token = crc32.buf(inputData).toString(16);
   return token;
 }
-
+ 
 // Function that lists tokens with corresponding usernames
 function listTokens() {
   const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
@@ -29,8 +29,13 @@ function listTokens() {
     users.forEach((user) => {
       console.log(`${user.username} : ${user.token}`);
     });
+
+    // Log the action
+    logMessage("Listed all users and tokens");
   });
 }
+
+
 
 // Function for fetching user record from username
 function fetchToken(username) {
@@ -47,11 +52,15 @@ function fetchToken(username) {
 
     if (user) {
       console.log(user); // Prints the full user record
+
+      // Log the action
+      logMessage(`Fetched token for ${username}`);
     } else {
       console.log(`No user found with username: ${username}`);
     }
   });
 }
+
 //function that counts tokens
 
 function countTokens() {
@@ -77,8 +86,11 @@ function countTokens() {
   });
 }
 // Function that generates a token for a given username
+// Function that generates a token for a given username
 function generateToken(username) {
-  fs.readFile("./json/users.json", "utf8", (err, data) => {
+  const jsonFilePath = path.join(__dirname, "..", "json", "users.json");
+
+  fs.readFile(jsonFilePath, "utf8", (err, data) => {
     if (err && err.code !== "ENOENT") {
       console.error(err);
       return;
@@ -105,12 +117,21 @@ function generateToken(username) {
         "utf8"
       );
       const token = encodeCRC(inputData);
-      console.log(`Token generated for ${username}: ${token}`);
+      foundUser.token = token; // Update the token in the user object
+
+      fs.writeFile(jsonFilePath, JSON.stringify(users), "utf8", (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log(`Token generated for ${username}: ${token}`);
+      });
     } else {
       console.log(`User not found: ${username}`);
     }
   });
 }
+
 // Function that updates token entry (phone or email) for a given username
 function updateToken(tokenType, username, value) {
   fs.readFile("./json/users.json", "utf8", (err, data) => {
