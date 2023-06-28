@@ -88,7 +88,8 @@ app.post("/signup", (req, res) => {
     username,
     password,
     cell,
-    email
+    email,
+    token: "" // Add an empty "token" attribute
   };
 
   fs.readFile("./json/users.json", "utf8", (err, data) => {
@@ -125,7 +126,6 @@ app.post("/signup", (req, res) => {
     );
   });
 });
-
 
 // Route for the home page
 app.get("/home", function (req, res) {

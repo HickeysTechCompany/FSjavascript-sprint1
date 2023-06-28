@@ -105,7 +105,22 @@ function generateToken(username) {
         "utf8"
       );
       const token = encodeCRC(inputData);
+      foundUser.token = token; // Update the token attribute of the found user
       console.log(`Token generated for ${username}: ${token}`);
+
+      // Save the updated users array to the users.json file
+      fs.writeFile(
+        "./json/users.json",
+        JSON.stringify(users),
+        "utf8",
+        (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          console.log(`Token saved for ${username}`);
+        }
+      );
     } else {
       console.log(`User not found: ${username}`);
     }
