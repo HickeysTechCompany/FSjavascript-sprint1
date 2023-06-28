@@ -1,4 +1,4 @@
-const folders = [`commands`, `json`, `logs`, `styles`, `pages`]; // Any folders added here will be created by createDirectoryStructure(); in cliFunctions/init.js
+const folders = [`commands`, `json`, `logs`, `styles`, `pages`, `pagescripts`]; // Any folders added here will be created by createDirectoryStructure(); in cliFunctions/init.js
 
 // Template for when user requests node cli --help
 const allhelptxt = `
